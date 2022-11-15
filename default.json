@@ -1,0 +1,78 @@
+{
+  "extends": ["github>whitesource/merge-confidence:beta", "config:base"],
+  "prConcurrentLimit": 0,
+  "branchConcurrentLimit": 0,
+  "prHourlyLimit": 0,
+  "labels": ["dependencies"],
+  "lockFileMaintenance": {
+    "enabled": true
+  },
+  "circleci": {
+    "fileMatch": "(^|/).circleci/.+yml$"
+  },
+  "kubernetes": {
+    "fileMatch": ["k8s/.+yaml$"]
+  },
+  "packageRules": [
+    {
+      "matchManagers": ["terraform"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "Terraform dependencies (non-major)"
+    },
+    {
+      "matchManagers": ["gradle"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "Gradle dependencies (non-major)"
+    },
+    {
+      "matchManagers": ["circleci"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "CircleCI dependencies (non-major)"
+    },
+    {
+      "matchManagers": ["dockerfile"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "Dockerfile dependencies (non-major)"
+    },
+    {
+      "matchManagers": ["docker-compose"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "Docker Compose dependencies (non-major)"
+    },
+    {
+      "matchManagers": ["kubernetes"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "Kubernetes dependencies (non-major)"
+    },
+    {
+      "matchManagers": ["npm"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "Npm dependencies (non-major)"
+    },
+    {
+      "matchDepTypes": ["provider", "required_provider"],
+      "rangeStrategy": "bump"
+    },
+    {
+      "matchPaths": ["rover.sh"],
+      "matchUpdateTypes": ["patch", "pin", "digest"],
+      "assignees": ["abernix", "EverlastingBugstopper"]
+    },
+    {
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["ubuntu"],
+      "versioning": "regex:^(?<compatibility>\\w+)-(?<minor>\\d+)$"
+    }
+  ],
+  "ignorePaths": ["**/bower_components/**", "**/node_modules/**"],
+  "assignAutomerge": false,
+  "enabledManagers": [
+    "circleci",
+    "dockerfile",
+    "docker-compose",
+    "terraform",
+    "kubernetes",
+    "gradle",
+    "npm"
+  ]
+}
